@@ -7,14 +7,11 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // sign in anonymously
-  Future<FirebaseUser> signInAnonymously() async {
+  Future<void> signInAnonymously() async {
     try {
-      AuthResult result = await _auth.signInAnonymously();
-      FirebaseUser user = result.user;
-      return user;
+      await _auth.signInAnonymously();
     } catch (e) {
-      print(e.toString());
-      return null;
+      throw e;
     }
   }
 
@@ -27,6 +24,14 @@ class AuthService {
   }
 
   // sign in with email & password
+  Future<void> signInWithEmailAndPassword(Map<String, String> authData) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+          email: authData['email'], password: authData['password']);
+    } catch (e) {
+      throw e;
+    }
+  }
 
   // sign in with Google Account
   Future<FirebaseUser> handleSignIn() async {
@@ -46,9 +51,17 @@ class AuthService {
   }
 
   // register with email and password
+  Future<void> register(Map<String, String> authData) async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+          email: authData['email'], password: authData['password']);
+    } catch (e) {
+      throw e;
+    }
+  }
 
   // sign out
-  Future signOut() async{
+  Future signOut() async {
     return await _auth.signOut();
   }
 }
