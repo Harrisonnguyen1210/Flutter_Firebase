@@ -56,10 +56,10 @@ class _AuthenticateScreenState extends State<AuthenticateScreen> {
       }
     } catch (e) {
       _showErrorDialog(e.toString());
+      setState(() {
+        _isLoading = false;
+      });
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   void _switchAuthMode() {

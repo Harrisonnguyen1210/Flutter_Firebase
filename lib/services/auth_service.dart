@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase/models/user.dart';
+import 'package:flutter_firebase/services/database_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -53,8 +54,10 @@ class AuthService {
   // register with email and password
   Future<void> register(Map<String, String> authData) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
           email: authData['email'], password: authData['password']);
+      // create a new document for the user with uId
+      await DatabaseService(uId: authResult.user.uid).updateUserData('0', 'new crew member', 100);
     } catch (e) {
       throw e;
     }
