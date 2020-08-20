@@ -47,7 +47,6 @@ class AuthService {
 
     final FirebaseUser user =
         (await _auth.signInWithCredential(credential)).user;
-    print("signed in " + user.displayName);
     return user;
   }
 
