@@ -56,7 +56,11 @@ class AuthService {
       AuthResult authResult = await _auth.createUserWithEmailAndPassword(
           email: authData['email'], password: authData['password']);
       // create a new document for the user with uId
-      await DatabaseService(uId: authResult.user.uid).updateUserData('0', 'new crew member', 100);
+      await DatabaseService(uId: authResult.user.uid).updateUserData({
+        'name': 'new crew member',
+        'sugars': '0',
+        'strength': 100,
+      });
     } catch (e) {
       throw e;
     }

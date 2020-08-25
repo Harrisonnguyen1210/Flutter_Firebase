@@ -9,17 +9,21 @@ class DatabaseService {
   final CollectionReference _brewCollection =
       Firestore.instance.collection('brews');
 
-  Future<void> updateUserData(String sugars, String name, int strength) async {
-    return await _brewCollection
-        .document(uId)
-        .setData({'sugars': sugars, 'name': name, 'strength': strength});
+  Future<void> updateUserData(Map<String, dynamic> brewData) async {
+    return await _brewCollection.document(uId).setData({
+      'sugars': brewData['sugars'],
+      'name': brewData['name'],
+      'strength': brewData['strength']
+    });
   }
 
   List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((document) => Brew(
-        name: document.data['name'] ?? '',
-        sugars: document.data['sugars'] ?? 0,
-        strength: document.data['strength'] ?? '')).toList();
+    return snapshot.documents
+        .map((document) => Brew(
+            name: document.data['name'] ?? '',
+            sugars: document.data['sugars'] ?? 0,
+            strength: document.data['strength'] ?? ''))
+        .toList();
   }
 
   Stream<List<Brew>> get brews {

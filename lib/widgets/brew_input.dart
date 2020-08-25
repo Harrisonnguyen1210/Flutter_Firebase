@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/models/user.dart';
+import 'package:flutter_firebase/services/database_service.dart';
+import 'package:provider/provider.dart';
 
 class BrewInput extends StatefulWidget {
   @override
@@ -11,16 +14,20 @@ class _BrewInputState extends State<BrewInput> {
   final List<String> sugars = ['0', '1', '2', '3', '4', '5', '6'];
 
   Map<String, dynamic> _brewData = {
-    'name': null,
-    'sugars': null,
-    'strength': null,
+    'name': '',
+    'sugars': '0',
+    'strength': 100,
   };
 
-  _updateBrew() {}
+  Future<void> _updateBrewOfUser(User user) async {
+    await DatabaseService(uId: user.uId).updateUserData(_brewData);
+  }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    final user = Provider.of<User>(context);
+
     return Padding(
       padding: EdgeInsets.only(
           left: 10.0,
@@ -37,7 +44,7 @@ class _BrewInputState extends State<BrewInput> {
             TextFormField(
               validator: (value) =>
                   value.isEmpty ? 'Please enter a name' : null,
-              onSaved: (value) {
+              onChanged: (value) {
                 _brewData['name'] = value;
               },
             ),
@@ -57,16 +64,16 @@ class _BrewInputState extends State<BrewInput> {
             SizedBox(height: 20.0),
             Slider(
               activeColor:
-                  Colors.brown[(_brewData['strength'] ?? 400).round()],
+                  Colors.brown[(_brewData['strength'])],
               inactiveColor:
-                  Colors.blue[(_brewData['strength'] ?? 400).round()],
-              value: _brewData['strength'] ?? 400,
+                  Colors.blue[(_brewData['strength'])],
+              value: _brewData['strength'].toDouble(),
               min: 100,
               max: 900,
               divisions: 8,
               onChanged: (value) {
                 setState(() {
-                  _brewData['strength'] = value;
+                  _brewData['strength'] = value.round();
                 });
               },
             ),
@@ -77,7 +84,7 @@ class _BrewInputState extends State<BrewInput> {
                 'Update',
                 style: TextStyle(color: Colors.white),
               ),
-              onPressed: _updateBrew,
+              onPressed: () => _updateBrewOfUser(user),
             ),
           ],
         ),
