@@ -29,4 +29,12 @@ class DatabaseService {
   Stream<List<Brew>> get brews {
     return _brewCollection.snapshots().map(_brewListFromSnapshot);
   }
+
+  Stream<Brew> get userBrew {
+    return _brewCollection.document(uId).snapshots().map((snapshot) => Brew(
+          name: snapshot.data['name'],
+          strength: snapshot.data['strength'],
+          sugars: snapshot.data['sugars'],
+        ));
+  }
 }
