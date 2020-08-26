@@ -91,13 +91,15 @@ class _BrewInputState extends State<BrewInput> {
                   ),
                   SizedBox(height: 20.0),
                   RaisedButton(
-                    color: Colors.pink[400],
-                    child: Text(
-                      'Update',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () => _updateBrewOfUser(user, userBrew),
-                  ),
+                      color: Colors.pink[400],
+                      child: Text(
+                        'Update',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        _updateBrewOfUser(user, userBrew);
+                        Navigator.of(context).pop();
+                      }),
                 ],
               ),
             ),
